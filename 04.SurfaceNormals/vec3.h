@@ -15,8 +15,12 @@ public:
 
 	// Vector To Vector Arithematic Operations.
 	Vec3<T> operator+(const Vec3<T> &v) const { return Vec3<T>(x + v.x, y + v.y, z + v.z); }
+	Vec3<T> operator-(const Vec3<T> &v) const { return Vec3<T>(x - v.x, y - v.y, z - v.z); }
 
 	Vec3<T> operator*(const Vec3<T> &v) const { return Vec3<T>(x * v.x, y * v.y, z * v.z); }
+
+	// Dot Product.
+	T dot(const Vec3<T> &v) const { return (x * v.x + y * v.y + z * v.z); }
 
 	// Length of the vector.
 	T length2() const { return (x*x + y* y + z*z); }

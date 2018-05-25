@@ -1,5 +1,3 @@
-#pragma once
-
 #include "ray.h"
 
 Ray::Ray() : origin(Vec3f(0.0f, 0.0f, 0.0f)), direction(Vec3f(0.0f, 0.0f, 0.0f))
