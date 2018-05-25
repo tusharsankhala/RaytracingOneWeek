@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{CC940C6E-F91C-4338-A731-DD9DED3EC25F}</ProjectGuid>
+    <ProjectGuid>{CB464EF7-B29E-4EA1-890F-E4FDB8567612}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>My03Ray</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -142,12 +142,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="ray.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="ray.h" />
     <ClInclude Include="vec3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ray.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
