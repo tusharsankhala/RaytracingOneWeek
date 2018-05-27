@@ -1,59 +1,127 @@
-#pragma once
+# ifndef VEC3H
+#define VEC3H
+#include <math.h>
+#include <stdlib.h>
+#include <iostream>
 
-template <typename T>
-class Vec3
+class vec3 
 {
 public:
+	vec3() {}
+	vec3(float xx, float yy, float zz) : x(xx), y(yy), z(zz){ }
 
-	// Ctors.
-	Vec3() : x(T(0)), y(T(0)), z(T(0)) {}
-	Vec3(T xx) : x(xx), y(xx), z(xx) {}
-	Vec3(T xx, T yy, T zz) : x(xx), y(yy), z(zz) {}
+	inline const vec3& operator+() const { return *this; }
+	inline vec3 operator-() const { return vec3(-x, -y, -z); }
 
-	// Vector To Scalar Arithematic Operations.
-	Vec3<T> operator*(const T &f) const { return Vec3<T>(x * f, y * f, z * f); }
+	inline vec3& operator+=(const vec3 &v2);
+	inline vec3& operator-=(const vec3 &v2);
+	inline vec3& operator*=(const vec3 &v2);
+	inline vec3& operator/=(const vec3 &v2);
+	inline vec3& operator*=(const float t);
+	inline vec3& operator/=(const float t);
 
-	// Vector To Vector Arithematic Operations.
-	Vec3<T> operator+(const Vec3<T> &v) const { return Vec3<T>(x + v.x, y + v.y, z + v.z); }
-	Vec3<T> operator-(const Vec3<T> &v) const { return Vec3<T>(x - v.x, y - v.y, z - v.z); }
+	inline float length() const { return sqrt(x * x + y * y + z * z); }
+	inline float squared_length() const { return x * x + y * y + z * z; }
+	inline void make_unit_vector();
 
-	Vec3<T> operator*(const Vec3<T> &v) const { return Vec3<T>(x * v.x, y * v.y, z * v.z); }
-
-	Vec3<T> operator/(const float &f) const { return Vec3<T>(x / f, y / f, y / f); }
-
-	// Dot Product.
-	T dot(const Vec3<T> &v) const { return (x * v.x + y * v.y + z * v.z); }
-
-	// Length of the vector.
-	T length2() const { return (x*x + y* y + z*z); }
-
-	T length() const { return sqrt(length2()); }
-
-	// Vector Normalization.
-	Vec3& normalize()
-	{
-		// Getting the length of the vector.
-		T vlen = length();
-
-		if (vlen > 0)
-		{
-			T invLen = 1 / vlen;
-			x *= invLen;
-			y *= invLen;
-			z *= invLen;
-		}
-
-		return *this;
-	}
-
-	// Vector Components. 
-	T x, y, z;
+	float x, y, z;
 };
 
-template <typename T>
-inline Vec3<T> operator*(T &f, const Vec3<T> &v)
+inline void vec3::make_unit_vector() 
 {
-	return Vec3<T>(f * v.x, f * v.y, f * v.z);
+	float k = 1.0 / sqrt(x * x + y * y + z * z);
+	x *= k; y *= k; z *= k;
 }
 
-typedef Vec3<float> Vec3f;
+inline vec3 operator+(const vec3 &v1, const vec3 &v2) 
+{
+	return vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+}
+
+inline vec3 operator-(const vec3 &v1, const vec3 &v2) {
+	return vec3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+}
+
+inline vec3 operator*(const vec3 &v1, const vec3 &v2) {
+	return vec3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+}
+
+inline vec3 operator/(const vec3 &v1, const vec3 &v2) {
+	return vec3(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
+}
+
+inline vec3 operator*(float t, const vec3 &v) {
+	return  vec3(t * v.x, t * v.y, t * v.z);
+}
+
+inline vec3 operator/(vec3 v, float t) 
+{
+	return  vec3(v.x / t, v.y / t, v.z / t);
+}
+
+inline vec3 operator*(const vec3 &v, float t) 
+{
+	return  vec3(t * v.x, t * v.y, t * v.z);
+}
+
+inline float dot(const vec3 &v1, const vec3 &v2) 
+{
+	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+inline vec3& vec3::operator+=(const vec3 &v) 
+{
+	x += v.x;
+	y += v.y;
+	z += v.z;
+	return *this;
+}
+
+inline vec3& vec3::operator*=(const vec3 &v) 
+{
+	x *= v.x;
+	y *= v.y;
+	z *= v.z;
+	return *this;
+}
+
+inline vec3& vec3::operator/=(const vec3 &v) 
+{
+	x /= v.x;
+	y /= v.y;
+	z /= v.z;
+	return *this;
+}
+
+inline vec3& vec3::operator-=(const vec3& v) 
+{
+	x -= v.x;
+	y -= v.y;
+	z -= v.z;
+	return *this;
+}
+
+inline vec3& vec3::operator*=(const float t) 
+{
+	x *= t;
+	y *= t;
+	z *= t;
+	return *this;
+}
+
+inline vec3& vec3::operator/=(const float t) 
+{
+	float k = 1.0 / t;
+
+	x *= k;
+	y *= k;
+	z *= k;
+	return *this;
+}
+
+inline vec3 unit_vector(vec3 v) 
+{
+	return v / v.length();
+}
+
+#endif

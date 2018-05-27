@@ -1,16 +1,16 @@
-#pragma once
+#ifndef HITABLELISTH
+#define HITABLELISTH
 
 #include "hitable.h"
 
-class hitable_list : public hitable
+class hitable_list : public hitable 
 {
 public:
 	hitable_list() {}
-	hitable_list(hitable **l, int n) : list(l), hitList_size(n) {}
-
-	bool hit(const Ray & ray, float t_min, float t_max, hit_record & rec) const;
-
-public:
+	hitable_list(hitable **l, int n) { list = l; list_size = n; }
+	virtual bool hit(const Ray& r, float tmin, float tmax, hit_record& rec) const;
 	hitable **list;
-	int hitList_size;
+	int list_size;
 };
+
+#endif

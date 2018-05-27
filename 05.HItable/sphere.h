@@ -1,17 +1,16 @@
-#pragma once
+#ifndef SPHEREH
+#define SPHEREH
 
 #include "hitable.h"
 
-// Class Sphere => Subclass of hitable.
-class Sphere : public hitable
+class sphere : public hitable 
 {
 public:
-	// Ctors.
-	Sphere() {};
-	Sphere(Vec3f cen, float rad) : center(cen), radius(rad) {}
-
-	virtual bool hit(const Ray& ray, float t_min, float t_max, hit_record &rec) const;
-
-	Vec3f center;
+	sphere() {}
+	sphere(vec3 cen, float r) : center(cen), radius(r) {};
+	virtual bool hit(const Ray& r, float tmin, float tmax, hit_record& rec) const;
+	vec3 center;
 	float radius;
 };
+
+#endif

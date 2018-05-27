@@ -1,23 +1,16 @@
-#pragma once
-
+# ifndef RAYH
+#define RAYH
 #include "vec3.h"
 
 class Ray
 {
 public:
-	// Ctor.
-
-	// Default Constructor.
 	Ray();
+	Ray(const vec3& or , const vec3& dir);
+	vec3 point_at_parameter(float t) const;
 
-	// Copy Constructor.
-	Ray(Vec3f or , Vec3f dir);
-
-	// Calculating Point at parameter (t).
-	// equation: Origin + t * direction.
-	Vec3f point_at_parameter(float t) const;
-
-	// Ray Origin and Distance.
-	Vec3f origin;
-	Vec3f direction;
+	vec3 origin;
+	vec3 direction;
 };
+
+#endif 
