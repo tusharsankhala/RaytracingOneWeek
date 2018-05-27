@@ -2,7 +2,7 @@
 
 bool sphere::hit(const Ray& r, float t_min, float t_max, hit_record& rec) const 
 {
-	vec3 oc = r.origin - center;
+	vec3f oc = r.origin - center;
 
 	float a = r.get_direction().dot(r.get_direction());
 	float b = oc.dot(r.get_direction());
