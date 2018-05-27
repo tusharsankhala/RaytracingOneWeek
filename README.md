@@ -7,6 +7,6 @@ to keep the track and major changes happening in the code.
 
 
 
-### Chapter 2 
+### Chapter6 : Antialiasing
 
-![image](https://github.com/tusharsankhala/RaytracingOneWeek/blob/master/02.Vec3/image.ppm)
+![image](https://github.com/tusharsankhala/RaytracingOneWeek/blob/master/Images/06.Antialiasing.jpg)
