@@ -3,11 +3,13 @@
 bool sphere::hit(const Ray& r, float t_min, float t_max, hit_record& rec) const 
 {
 	vec3 oc = r.origin - center;
-	float a = dot(r.direction, r.direction);
-	float b = dot(oc, r.direction);
-	float c = dot(oc, oc) - radius*radius;
+
+	float a = r.get_direction().dot(r.get_direction());
+	float b = oc.dot(r.get_direction());
+	float c = oc.dot(oc) - radius*radius;
 	float discriminant = b*b - a*c;
-	if (discriminant > 0) {
+	if (discriminant > 0) 
+	{
 		float temp = (-b - sqrt(discriminant)) / a;
 		if (temp < t_max && temp > t_min) 
 		{
