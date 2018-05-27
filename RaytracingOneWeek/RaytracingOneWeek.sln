@@ -13,7 +13,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04.Sphere", "..\04.Sphere\0
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04.SurfaceNormals", "..\04.SurfaceNormals\04.SurfaceNormals.vcxproj", "{9867D815-375D-4289-A287-967796A551D7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05.HItable", "..\05.HItable\05.HItable.vcxproj", "{38648207-A3F4-4AE2-A792-89614A888C5A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05.Hitable", "..\05.HItable\05.HItable.vcxproj", "{38648207-A3F4-4AE2-A792-89614A888C5A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "06.Camera", "..\06.Camera\06.Camera.vcxproj", "{39EC8DE5-242E-465B-9823-3CFD0962A558}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,14 @@ Global
 		{38648207-A3F4-4AE2-A792-89614A888C5A}.Release|x64.Build.0 = Release|x64
 		{38648207-A3F4-4AE2-A792-89614A888C5A}.Release|x86.ActiveCfg = Release|Win32
 		{38648207-A3F4-4AE2-A792-89614A888C5A}.Release|x86.Build.0 = Release|Win32
+		{39EC8DE5-242E-465B-9823-3CFD0962A558}.Debug|x64.ActiveCfg = Debug|x64
+		{39EC8DE5-242E-465B-9823-3CFD0962A558}.Debug|x64.Build.0 = Debug|x64
+		{39EC8DE5-242E-465B-9823-3CFD0962A558}.Debug|x86.ActiveCfg = Debug|Win32
+		{39EC8DE5-242E-465B-9823-3CFD0962A558}.Debug|x86.Build.0 = Debug|Win32
+		{39EC8DE5-242E-465B-9823-3CFD0962A558}.Release|x64.ActiveCfg = Release|x64
+		{39EC8DE5-242E-465B-9823-3CFD0962A558}.Release|x64.Build.0 = Release|x64
+		{39EC8DE5-242E-465B-9823-3CFD0962A558}.Release|x86.ActiveCfg = Release|Win32
+		{39EC8DE5-242E-465B-9823-3CFD0962A558}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
