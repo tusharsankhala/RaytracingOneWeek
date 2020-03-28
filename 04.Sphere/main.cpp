@@ -19,94 +19,83 @@
 //	Finally, R, A, B, and C are all parameters that we specify. We need to know the value of t. Just solve the equation.
 //	Based on algebra knowledge, it can be introduced
 //	dot(B,B) t ^ 2 + 2 dot( B , A-C ) * t + dot(A-C,A-C) - R^2 = 0
-
-// Sphere hit test function.
-bool hit_sphere(Vec3f center, float radius, const Ray& ray)
+bool hit_sphere(const vec3f center, const float radius, const Ray& ray)
 {
-	Vec3f oc = ray.origin - center;
-	
-	// Calculating the roots of the equation.
-	float a = ray.direction.dot(ray.direction);
-	float b = 2.0f * ray.direction.dot(oc);
-	float c = oc.dot(oc) - radius * radius;
+	vec3f oc = ray.origin() - center;
 
-	float discriminant = b * b - (4 * a * c);
-	
+	// Calculating roots of the equation.
+	float a = dot(ray.direction(), ray.direction());
+	float b = 2 * dot(oc, ray.direction());
+	float c = dot(oc, oc) - radius * radius;
+
+	float discriminant = b * b - 4 * a * c;
+
 	return (discriminant > 0);
 }
 
 
 // Creating the gradient texture.
-Vec3f color(const Ray& ray)
+vec3f color(const Ray& ray)
 {
-	if (hit_sphere(Vec3f(0, 0, -1), 0.5f, ray))
-	{
-		return Vec3f(1, 0, 0);
-	}
+	if (hit_sphere(vec3f(0.0f, 0.0f, -1.0f), 0.5f, ray))
+		return vec3f(1, 0, 0);
 
-	Vec3f ray_NormDir = ray.direction;
-	ray_NormDir = ray_NormDir.normalize();
-
-	// Since the value of y is -1 to 1, we used a common normalization trick here to remap to (0,1).
-	float t = 0.5f * (ray_NormDir.y + 1.0f);
+	vec3f unitDirection = ray.direction().normalize();
+	
+	// normaldirection has range from [-1, 1] so bringing
+	// it into the range ofo [0,1].
+	float t = 0.5f * (unitDirection.y() + 1.0f);
 
 	// This basically is a lerp function.
 	// Lerp : (1-t) * start + t * end; where t = Controlling Parameter.
-	// t=0, color=vec3(1,1,1), multiplied by 255, the corresponding RGB is (255,255,255)  
-	// t=1, color=vec3(0.5,0.7,1), multiplied by 255, corresponds to RGB (127.5,178.5,255)  
+	// t=0, color=vec3(1,1,1), multiplied by 255, the corresponding RGB is (255,255,255) = white color.  
+	// t=1, color=vec3(0.5,0.7,1), multiplied by 255, corresponds to RGB (127.5,178.5,255) = sky blue color.  
 	// The above two colors correspond to "white" and "light blue" respectively.  
-	// The picture color = (1-t)* "white" + t* "light blue", which is the result of the linear interpolation of the picture colors "white" and "light blue" (along the Y direction). 
-	// If you want to change to X or Z direction, change the above .y() to .x() or .z().
-	// To change other colors, set the corresponding RGB value.
-
-	Vec3f lerpColor = Vec3f(1.0f, 1.0f, 1.0f) * (1.0f - t) + Vec3f(0.5f, 0.7f, 1.0f) * t;
-
-	return (lerpColor);
+	// The picture color = (1-t) * white + t * light blue, which is the result of the linear interpolation of the picture colors
+	// "white" and "light blue" (along the Y direction). 
+	return (1 - t) * vec3f(1.0f, 1.0f, 1.0f) + t * vec3f(0.5f, 0.7f, 1.0f);
 }
+
 
 int main(int argc, char* argv[])
 {
-
-	// Creating a basic PPM image file with gradient color.
 	std::ofstream imageFile;
-	imageFile.open("image.ppm");
-
-	// Image Corner points.
-	Vec3f lower_left_corner(-2.0, -1.0, -1.0);
-	Vec3f vertical(0.0, 2.0, 0.0);
-	Vec3f horizontal(4.0, 0.0, 0.0);
-	Vec3f origin(0.0, 0.0, 0.0);
-
-	if (imageFile)
+	try
 	{
-		imageFile << "P3\n" << IMG_WIDTH << " " << IMG_HEIGHT << "\n";
-		imageFile << "255" << "\n";
-
-		// Starting the image file to bottom left to top right.
-		for (int y = IMG_HEIGHT - 1; y >= 0; y--)
+		imageFile.open("Output.ppm");
+		if (imageFile)
 		{
-			for (int x = 0; x < IMG_WIDTH; x++)
+			imageFile << "P3\n" << IMG_WIDTH << " " << IMG_HEIGHT << "\n255\n";
+
+			vec3f lower_left_corner(-2.0f, -1.0f, -1.0f);
+			vec3f horizontal(4.0f, 0.0f, 0.0f);
+			vec3f vertical(0.0f, 2.0f, 0.0f);
+			vec3f origin(0.0f, 0.0f, 0.0f);
+
+			// Y (Top to Bottom)
+			// X (Left to right)
+			for (int y = IMG_HEIGHT - 1; y >= 0; --y)
 			{
-				// Normalizing the value.
-				float u = float(x) / float(IMG_WIDTH);
-				float v = float(y) / float(IMG_HEIGHT);
+				for (int x = 0; x < IMG_WIDTH; ++x)
+				{
+					float u = float(x) / IMG_WIDTH;
+					float v = float(y) / IMG_HEIGHT;
 
-				Ray r(origin, lower_left_corner + u * horizontal + v * vertical);
-				Vec3f col = color(r);
+					Ray ray(origin, lower_left_corner + u * horizontal + v * vertical);
+					vec3f col = color(ray);
+					int r = int(255.99 * col[0]);
+					int g = int(255.99 * col[1]);
+					int b = int(255.99 * col[2]);
 
-				// Again putting it in the value of 0-255.
-				int iR = int(col.x * 255.99);
-				int iG = int(col.y * 255.99);
-				int iB = int(col.z * 255.99);
-
-				imageFile << iR << " " << iG << " " << iB << "\n";
-				//std::cout << iR << " " << iG << " " << iB << "\n";
+					imageFile << r << " " << g << " " << b << "\n";
+				}
 			}
 		}
 	}
-	else
+	catch (std::exception ex)
 	{
-		std::cout << "Error opening image file" << std::endl;
+		std::cerr << ex.what();
+		std::cerr << "Error opening image file" << std::endl;
 	}
 
 	imageFile.close();

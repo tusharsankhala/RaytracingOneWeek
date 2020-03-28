@@ -5,19 +5,14 @@
 class Ray
 {
 public:
-	// Ctor.
+    Ray() : A(vec3f(0.0f, 0.0f, 0.0f)), B(vec3f(1.0f, 0.0f, 0.0f)) {}
+    Ray(vec3f _A, vec3f _B) : A(_A), B(_B) {}
 
-	// Default Constructor.
-	Ray();
+    vec3f origin() const { return A; }
+    vec3f direction() const { return B; }
+    vec3f point_at_parameter(const float t) const { return A + (t * B); }
 
-	// Copy Constructor.
-	Ray(Vec3f or , Vec3f dir);
-
-	// Calculating Point at parameter (t).
-	// equation: Origin + t * direction.
-	Vec3f point_at_parameter(float t) const;
-
-	// Ray Origin and Distance.
-	Vec3f origin;
-	Vec3f direction;
+private:
+    vec3f A;        // Starting Postion.
+    vec3f B;        // Ray Direction.
 };

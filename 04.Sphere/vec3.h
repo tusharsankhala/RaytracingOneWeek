@@ -1,57 +1,86 @@
 #pragma once
 
+#include <math.h>
+#include <ostream>
+
 template <typename T>
-class Vec3
+class vec3
 {
 public:
-
-	// Ctors.
-	Vec3() : x(T(0)), y(T(0)), z(T(0)) {}
-	Vec3(T xx) : x(xx), y(xx), z(xx) {}
-	Vec3(T xx, T yy, T zz) : x(xx), y(yy), z(zz) {}
-
-	// Vector To Scalar Arithematic Operations.
-	Vec3<T> operator*(const T &f) const { return Vec3<T>(x * f, y * f, z * f); }
-
-	// Vector To Vector Arithematic Operations.
-	Vec3<T> operator+(const Vec3<T> &v) const { return Vec3<T>(x + v.x, y + v.y, z + v.z); }
-	Vec3<T> operator-(const Vec3<T> &v) const { return Vec3<T>(x - v.x, y - v.y, z - v.z); }
-
-	Vec3<T> operator*(const Vec3<T> &v) const { return Vec3<T>(x * v.x, y * v.y, z * v.z); }
-
-	// Dot Product.
-	T dot(const Vec3<T> &v) const { return (x * v.x	+ y * v.y + z * v.z); }
-
-	// Length of the vector.
-	T length2() const { return (x*x + y* y + z*z); }
-
-	T length() const { return sqrt(length2()); }
-
-	// Vector Normalization.
-	Vec3& normalize()
+	vec3() {}
+	vec3(T e0, T e1, T e2)
 	{
-		// Getting the length of the vector.
-		T vlen = length();
+		e[0] = e0;
+		e[1] = e1;
+		e[2] = e2;
+	}
 
-		if (vlen > 0)
+	inline T x() const { return e[0]; }
+	inline T y() const { return e[1]; }
+	inline T z() const { return e[2]; }
+	inline T r() const { return e[0]; }
+	inline T g() const { return e[1]; }
+	inline T b() const { return e[2]; }
+
+	inline vec3<T> operator*(const T p) { return vec3<T>(p * e[0], p * e[1], p * e[2]); }
+	inline T operator[](int index) { return e[index]; }
+
+	inline vec3<T> operator/(const float val) { return vec3<T>(e[0] / p, e[1] / p, e[2] / p); }
+
+	inline float magnitude() { return sqrtf(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]); }
+
+	inline vec3<T>& normalize()
+	{
+		// Getting lenght of the vector.
+		float mag = magnitude();
+
+		if (mag > 0)
 		{
-			T invLen = 1 / vlen;
-			x *= invLen;
-			y *= invLen;
-			z *= invLen;
+			float invLen = 1 / mag;
+
+			e[0] *= invLen;
+			e[1] *= invLen;
+			e[2] *= invLen;
 		}
 
 		return *this;
 	}
 
-	// Vector Components. 
-	T x, y, z;
+	inline float dot(const vec3<T>& vec) { return (e[0] * vec.r() + e[1] * vec.g() + e[2] * vec.b()); }
+
+	friend std::ostream& operator<<(std::ostream& os, const vec3<T>& vec)
+	{
+		os << "[" << vec.x() << " " << vec.y() << " " << vec.z() << "]";
+		return os;
+	}
+
+private:
+	T e[3];
 };
 
 template <typename T>
-inline Vec3<T> operator*(T &f, const Vec3<T> &v)
+inline vec3<T> operator*(const T p, const vec3<T>& vec)
 {
-	return Vec3<T>(f * v.x, f * v.y, f * v.z);
+	return vec3<T>(p * vec.x(), p * vec.y(), p * vec.z());
 }
 
-typedef Vec3<float> Vec3f;
+template <typename T>
+inline vec3<T> operator+(const vec3<T>& vec1, const vec3<T>& vec2)
+{
+	return vec3<T>(vec1.x() + vec2.x(), vec1.y() + vec2.y(), vec1.z() + vec2.z());
+}
+
+template <typename T>
+inline vec3<T> operator-(const vec3<T>& vec1, const vec3<T>& vec2)
+{
+	return vec3<T>(vec1.x() - vec2.x(), vec1.y() - vec2.y(), vec1.z() - vec2.z());
+}
+
+
+template <typename T>
+inline float dot(const vec3<T>& vec1, const vec3<T>& vec2)
+{ 
+	return (vec1.r() * vec2.r() + vec1.g() * vec2.g() + vec1.b() * vec2.b());
+}
+
+using vec3f = vec3<float>;
