@@ -7,7 +7,7 @@ template <typename T>
 class vec3
 {
 public:
-	vec3(){}
+	vec3() : e[0](T(0)), e[1](T(0)), e[2](T(0)) {}
 	vec3(T e0, T e1, T e2)
 	{
 		e[0] = e0;
@@ -27,16 +27,16 @@ public:
 
 	inline vec3<T> operator/(const float val) { return vec3<T>(e[0]/p, e[1]/p, e[2]/p); }
 
-	inline float magnitude() { return sqrtf(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]); }
+	inline double magnitude() { return sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]); }
 	
 	inline vec3<T>& normalize() 
 	{ 
 		// Getting lenght of the vector.
-		float mag = magnitude();
+		double mag = magnitude();
 
 		if (mag > 0)
 		{
-			float invLen = 1 / mag;
+			double invLen = 1 / mag;
 
 			e[0] *= invLen;
 			e[1] *= invLen;
@@ -71,3 +71,4 @@ inline vec3<T> operator+(const vec3<T>& vec1, const vec3<T>& vec2)
 }
 
 using vec3f = vec3<float>;
+using vec3d = vec3<double>;

@@ -28,3 +28,4 @@ private:
 };
 
 using vec3f = vec3<float>;
+using vec3d = vec3<double>;

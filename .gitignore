@@ -2,3 +2,12 @@
 *.tlog
 *.idb
 *.obj
+*.exe
+*.ilk
+*.pdb
+*.ipch
+*.db
+*.opendb
+*.db-shm
+*.db-wal
+*.user

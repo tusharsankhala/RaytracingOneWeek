@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		imageFile.open("Output.ppm");
+		imageFile.open("Output_02Vec3.ppm");
 		if (imageFile)
 		{
 			imageFile << "P3\n" << IMG_WIDTH << " " << IMG_HEIGHT << "\n255\n";
@@ -22,12 +22,13 @@ int main(int argc, char* argv[])
 			// X (Left to right)
 			for (int y = IMG_HEIGHT - 1; y >= 0; --y)
 			{
+				std::cerr << "\rScanline Rendering Remaining: " << y << ' ' << std::flush;
 				for (int x = 0; x < IMG_WIDTH; ++x)
 				{
-					vec3f col(float(x) / IMG_WIDTH, float(y) / IMG_HEIGHT, 0.2f);
-					int r = int(255.99 * col[0]);
-					int g = int(255.99 * col[1]);
-					int b = int(255.99 * col[2]);
+					vec3d col(double(x) / IMG_WIDTH, double(y) / IMG_HEIGHT, 0.2);
+					auto r = static_cast<int>(255.99 * col[0]);
+					auto g = static_cast<int>(255.99 * col[1]);
+					auto b = static_cast<int>(255.99 * col[2]);
 
 					imageFile << r << " " << g << " " << b << "\n";
 				}
@@ -40,6 +41,7 @@ int main(int argc, char* argv[])
 		std::cerr << "Error opening image file" << std::endl;
 	}
 
+	std::cerr << "\n\rRendering Completed..." << std::flush;
 	imageFile.close();
 
 	return 0;

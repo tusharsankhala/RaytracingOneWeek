@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		imageFile.open("Output.ppm");
+		imageFile.open("Output_01Start.ppm");
 		if (imageFile)
 		{
 			imageFile << "P3\n" << IMG_WIDTH <<  " " << IMG_HEIGHT << "\n255\n";
@@ -20,15 +20,16 @@ int main(int argc, char* argv[])
 			// X (Left to right)
 			for (int y = IMG_HEIGHT - 1; y >= 0; --y)
 			{
+				std::cerr << "\rScanline Rendering Remaining: " << y << ' ' << std::flush;
 				for (int x = 0; x < IMG_WIDTH; ++x)
 				{
-					float ir = float(x) / IMG_WIDTH;
-					float ig = float(y) / IMG_HEIGHT;
-					float ib = 0.2f;
+					auto ir = double(x) / IMG_WIDTH;
+					auto ig = double(y) / IMG_HEIGHT;
+					auto ib = 0.2;
 
-					int r = int(255.99 * ir);
-					int g = int(255.99 * ig);
-					int b = int(255.99 * ib);
+					int r = static_cast<int>(255.99 * ir);
+					int g = static_cast<int>(255.99 * ig);
+					int b = static_cast<int>(255.99 * ib);
 
 					imageFile << r << " " << g << " " << b << "\n";
 				}
@@ -41,6 +42,7 @@ int main(int argc, char* argv[])
 		std::cerr << "Error opening image file" << std::endl;
 	}
 
+	std::cerr << "\n\rRendering Finished: " << std::endl;
 	imageFile.close();
 
 	return 0;
