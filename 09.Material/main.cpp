@@ -4,11 +4,13 @@
 #include "hitable_list.h"
 #include "sphere.h"
 #include "camera.h"
+#include "lambertian.h"
+#include "metal.h"
 
 #define IMG_WIDTH 400
 #define IMG_HEIGHT 200
 #define IMG_SAMPLES 100
-#define max_depth 2
+#define max_depth 50
 
 // Creating the gradient texture.
 vec3d ray_color(const Ray& ray, const hitable& world, int depth)
@@ -22,9 +24,13 @@ vec3d ray_color(const Ray& ray, const hitable& world, int depth)
 
 	if (world.hit(ray, 0.001, infinity, rec))
 	{
-		// Normalize the result from (-1,1) to (0, 1).
-		vec3d target = rec.p + vec3d::random_in_hemisphere(rec.normal);
-		return 0.5 * ray_color(Ray(rec.p, target - rec.p), world, depth - 1);
+		Ray scattered;
+		vec3d attenuation;
+		if (rec.mat_ptr->scatter(ray, rec, attenuation, scattered))
+		{
+			return attenuation * ray_color(scattered, world, depth - 1);
+		}
+		return vec3d(0, 0, 0);
 	}
 
 	vec3d unit_direction = normalize(ray.direction());
@@ -46,7 +52,7 @@ int main(int argc, char* argv[])
 
 	// Creating a basic PPM image file with gradient color.
 	std::ofstream imageFile;
-	imageFile.open("../Images/08.Diffuse.ppm");
+	imageFile.open("../Images/09.Metal.ppm");
 
 	// Image Corner points.
 	vec3d lower_left_corner(-2.0, -1.0, -1.0);
@@ -55,8 +61,11 @@ int main(int argc, char* argv[])
 	vec3d origin(0.0, 0.0, 0.0);
 
 	hitable_list world;
-	world.AddObject(make_shared<sphere>(vec3d(0, 0, -1), 0.5));
-	world.AddObject(make_shared<sphere>(vec3d(0, -100.5, -1), 100));
+	world.AddObject(make_shared<sphere>(vec3d(0, 0, -1), 0.5, std::make_shared<lambertian>(vec3d(0.7, 0.3, 0.3))));
+	world.AddObject(make_shared<sphere>(vec3d(0, -100.5, -1), 100, std::make_shared<lambertian>(vec3d(0.8, 0.8, 0.0))));
+
+	world.AddObject(make_shared<sphere>(vec3d(-1, 0, -1), 0.5, std::make_shared<metal>(vec3d(0.8, 0.6, 0.2), 0.0)));
+	world.AddObject(make_shared<sphere>(vec3d(1, 0, -1), 0.5, std::make_shared<metal>(vec3d(0.8, 0.8, 0.8), 0.7)));
 
 	Camera cam;
 	if (imageFile)
@@ -70,7 +79,7 @@ int main(int argc, char* argv[])
 		// Starting the image file to bottom left to top right.
 		for (int y = IMG_HEIGHT - 1; y >= 0; --y)
 		{
-			std::cerr << "\rScanline Rendering Remaining: " << y << ' ' << std::flush;
+			std::cout << "\rScanline Rendering Remaining: " << y << ' ' << std::flush;
 			for (int x = 0; x < IMG_WIDTH; ++x)
 			{
 				vec3d col(0, 0, 0);

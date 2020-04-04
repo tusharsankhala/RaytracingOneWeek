@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CAMERA_H
+#define CAMERA_H
 
 // Camera Class.
 
@@ -23,3 +24,5 @@ public:
 	vec3d vertical;
 	vec3d origin;
 };
+
+#endif

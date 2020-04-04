@@ -128,6 +128,12 @@ inline vec3<T> operator-(const vec3<T>& vec1, const vec3<T>& vec2)
 }
 
 template <typename T>
+inline vec3<T> operator*(const vec3<T>& vec1, const vec3<T>& vec2)
+{
+	return vec3<T>(vec1.x() * vec2.x(), vec1.y() * vec2.y(), vec1.z() * vec2.z());
+}
+
+template <typename T>
 inline vec3<T> operator*(const T p, const vec3<T>& vec)
 {
 	return vec3<T>(p * vec.x(), p * vec.y(), p * vec.z());
@@ -150,6 +156,12 @@ inline vec3<T> normalize(const vec3<T>& vec)
 {
 	auto mag = vec.magnitude();
 	return (vec) / mag;
+}
+
+template <typename T>
+inline static vec3<T> reflect(const vec3<T>& v, const vec3<T>& n)
+{
+	return  v - (2 * dot(v, n) * n);
 }
 
 using vec3f = vec3<float>;

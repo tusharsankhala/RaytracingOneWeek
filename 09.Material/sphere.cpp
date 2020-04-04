@@ -32,6 +32,7 @@ bool sphere::hit(const Ray& r, double t_min, double t_max, hit_record& rec) cons
             rec.p = r.point_at_parameter(rec.t);
             vec3d outward_normal = normalize(rec.p - center);
             rec.Set_Face_Normal(r, outward_normal);
+            rec.mat_ptr = mat_ptr;
             return true;
         }
         temp = (-half_b + root) / a;
@@ -41,6 +42,7 @@ bool sphere::hit(const Ray& r, double t_min, double t_max, hit_record& rec) cons
             rec.p = r.point_at_parameter(rec.t);
             vec3d outward_normal = normalize(rec.p - center);
             rec.Set_Face_Normal(r, outward_normal);
+            rec.mat_ptr = mat_ptr;
             return true;
         }
     }
