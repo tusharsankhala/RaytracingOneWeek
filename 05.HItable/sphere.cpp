@@ -15,35 +15,34 @@
 
 // Sphere hit test function.
 // it will return the closest hit point t for the sphere.
-bool sphere::hit(const Ray& ray, float t_min, float t_max, hit_record& hitrec) const
+bool sphere::hit(const Ray& r, double t_min, double t_max, hit_record& rec) const
 {
-	vec3f oc = ray.origin() - center;
+    vec3d oc = r.origin() - center;
+    auto a = r.direction().magnitude_squared();
+    auto half_b = dot(oc, r.direction());
+    auto c = oc.magnitude_squared() - radius * radius;
+    auto discriminant = half_b * half_b - a * c;
 
-	float a = ray.direction().dot(ray.direction());
-	float b = 2.0f * oc.dot(ray.direction());
-	float c = oc.dot(oc) - radius * radius;
-	float discriminant = b * b - 4 * a * c;
-
-	if (discriminant > 0)
-	{
-		float temp = (-b - sqrtf(discriminant)) / (2 * a);
-
-		if (temp < t_max && temp > t_min)
-		{
-			hitrec.t = temp;
-			hitrec.p = ray.point_at_parameter(hitrec.t);
-			hitrec.normal = normalize(hitrec.p - center);			
-			return true;
-		}
-
-		temp = (-b + sqrtf(discriminant)) / (2 * a);
-		if (temp < t_max && temp > t_min)
-		{
-			hitrec.t = temp;
-			hitrec.p = ray.point_at_parameter(hitrec.t);
-			hitrec.normal = normalize(hitrec.p - center);
-			return true;
-		}
-	}
-	return false;
+    if (discriminant > 0)
+    {
+        auto root = sqrt(discriminant);
+        auto temp = (-half_b - root) / a;
+        if (temp < t_max && temp > t_min) {
+            rec.t = temp;
+            rec.p = r.point_at_parameter(rec.t);
+            vec3d outward_normal = normalize(rec.p - center);
+            rec.Set_Face_Normal(r, outward_normal);
+            return true;
+        }
+        temp = (-half_b + root) / a;
+        if (temp < t_max && temp > t_min)
+        {
+            rec.t = temp;
+            rec.p = r.point_at_parameter(rec.t);
+            vec3d outward_normal = normalize(rec.p - center);
+            rec.Set_Face_Normal(r, outward_normal);
+            return true;
+        }
+    }
+    return false;
 }

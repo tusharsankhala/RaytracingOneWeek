@@ -27,16 +27,16 @@ public:
 
 	inline vec3<T> operator/(const float val) { return vec3<T>(e[0] / p, e[1] / p, e[2] / p); }
 
-	inline float magnitude() { return sqrtf(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]); }
+	inline double magnitude() { return sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]); }
 
 	inline vec3<T>& normalize()
 	{
 		// Getting lenght of the vector.
-		float mag = magnitude();
+		double mag = magnitude();
 
 		if (mag > 0)
 		{
-			float invLen = 1 / mag;
+			double invLen = 1 / mag;
 
 			e[0] *= invLen;
 			e[1] *= invLen;
@@ -78,9 +78,10 @@ inline vec3<T> operator-(const vec3<T>& vec1, const vec3<T>& vec2)
 
 
 template <typename T>
-inline float dot(const vec3<T>& vec1, const vec3<T>& vec2)
+inline T dot(const vec3<T>& vec1, const vec3<T>& vec2)
 { 
 	return (vec1.r() * vec2.r() + vec1.g() * vec2.g() + vec1.b() * vec2.b());
 }
 
 using vec3f = vec3<float>;
+using vec3d = vec3<double>;

@@ -3,8 +3,8 @@
 
 #include "ray.h"
 
-#define IMG_WIDTH 600
-#define IMG_HEIGHT 300
+#define IMG_WIDTH 400
+#define IMG_HEIGHT 200
 
 
 //	Equation of the sphere
@@ -22,16 +22,16 @@
 
 // Sphere hit test function.
 // it will return the closest hit point t for the sphere.
-float hit_sphere(vec3f center, float radius, const Ray& ray)
+double hit_sphere(vec3d center, double radius, const Ray& ray)
 {
-	vec3f oc = ray.origin() - center;
+	vec3d oc = ray.origin() - center;
 
 	// Calculating the roots of the equation.
-	float a = ray.direction().dot(ray.direction());
-	float b = 2.0f * ray.direction().dot(oc);
-	float c = oc.dot(oc) - radius * radius;
+	auto a = ray.direction().magnitude_squared();
+	auto half_b = dot(ray.direction(), oc);
+	auto c = oc.magnitude_squared() - radius * radius;
 
-	float discriminant = b * b - (4 * a * c);
+	auto discriminant = half_b * half_b - (a * c);
 
 	if (discriminant < 0.0)
 	{
@@ -39,33 +39,33 @@ float hit_sphere(vec3f center, float radius, const Ray& ray)
 	}
 	else
 	{
-		return (-b - sqrtf(discriminant)) / (2.0f * a);
+		return (-half_b - sqrt(discriminant)) / (a);
 	}
 }
 
 // Creating the gradient texture.
-vec3f color(const Ray& ray)
+vec3d color(const Ray& ray)
 {
 	// Getting the neatrest hit point ot no hit point at all.
-	float t = hit_sphere(vec3f(0, 0, -1), 0.5f, ray);
+	auto t = hit_sphere(vec3d(0, 0, -1), 0.5, ray);
 
 	if (t > 0.0)
 	{
 		// Since t > 0.0 so there is a meaningfull root, so ray.point_at_parameter(t) will give the coordinates of
 		// that root.
-		vec3f N = ray.point_at_parameter(t) - vec3f(0, 0, -1);
+		vec3d N = ray.point_at_parameter(t) - vec3d(0, 0, -1);
 
 		// Normalizing N.
 		N = N.normalize();
 
-		return vec3f(N.x() + 1, N.y() + 1, N.z() + 1) * 0.5;
+		return vec3d(N.x() + 1, N.y() + 1, N.z() + 1) * 0.5;
 	}
 
-	vec3f ray_NormDir = ray.direction();
+	vec3d ray_NormDir = ray.direction();
 	ray_NormDir = ray_NormDir.normalize();
 
 	// Since the value of y is -1 to 1, we used a common normalization trick here to remap to (0,1).
-	t = 0.5f * (ray_NormDir.y() + 1.0f);
+	t = 0.5 * (ray_NormDir.y() + 1.0);
 
 	// This basically is a lerp function.
 	// Lerp : (1-t) * start + t * end; where t = Controlling Parameter.
@@ -76,7 +76,7 @@ vec3f color(const Ray& ray)
 	// If you want to change to X or Z direction, change the above .y() to .x() or .z().
 	// To change other colors, set the corresponding RGB value.
 
-	return (vec3f(1.0f, 1.0f, 1.0f) * (1.0f - t) + vec3f(0.5f, 0.7f, 1.0f) * t);
+	return (vec3d(1.0, 1.0, 1.0) * (1.0 - t) + vec3d(0.5, 0.7, 1.0) * t);
 }
 
 int main(int argc, char* argv[])
@@ -84,13 +84,13 @@ int main(int argc, char* argv[])
 
 	// Creating a basic PPM image file with gradient color.
 	std::ofstream imageFile;
-	imageFile.open("image_SurfaceNormal.ppm");
+	imageFile.open("image05_SurfaceNormal.ppm");
 
 	// Image Corner points.
-	vec3f lower_left_corner(-2.0, -1.0, -1.0);
-	vec3f vertical(0.0, 2.0, 0.0);
-	vec3f horizontal(4.0, 0.0, 0.0);
-	vec3f origin(0.0, 0.0, 0.0);
+	vec3d lower_left_corner(-2.0, -1.0, -1.0);
+	vec3d vertical(0.0, 2.0, 0.0);
+	vec3d horizontal(4.0, 0.0, 0.0);
+	vec3d origin(0.0, 0.0, 0.0);
 
 	if (imageFile)
 	{
@@ -100,22 +100,22 @@ int main(int argc, char* argv[])
 		// Starting the image file to bottom left to top right.
 		for (int y = IMG_HEIGHT - 1; y >= 0; y--)
 		{
+			std::cerr << "\rScanline Rendering Remaining: " << y << ' ' << std::flush;
 			for (int x = 0; x < IMG_WIDTH; x++)
 			{
 				// Normalizing the value.
-				float u = float(x) / float(IMG_WIDTH);
-				float v = float(y) / float(IMG_HEIGHT);
+				auto u = double(x) / IMG_WIDTH;
+				auto v = double(y) / IMG_HEIGHT;
 
 				Ray r(origin, lower_left_corner + u * horizontal + v * vertical);
-				vec3f col = color(r);
+				vec3d col = color(r);
 
 				// Again putting it in the value of 0-255.
-				int iR = int(col.x() * 255.99);
-				int iG = int(col.y() * 255.99);
-				int iB = int(col.z() * 255.99);
+				int iR = static_cast<int>(col.x() * 255.99);
+				int iG = static_cast<int>(col.y() * 255.99);
+				int iB = static_cast<int>(col.z() * 255.99);
 
 				imageFile << iR << " " << iG << " " << iB << "\n";
-				//std::cout << iR << " " << iG << " " << iB << "\n";
 			}
 		}
 	}
@@ -124,6 +124,7 @@ int main(int argc, char* argv[])
 		std::cout << "Error opening image file" << std::endl;
 	}
 
+	std::cerr << "\n\rRendering Completed..." << std::flush;
 	imageFile.close();
 
 	return 0;

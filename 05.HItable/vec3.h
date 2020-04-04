@@ -15,13 +15,6 @@ public:
 		e[2] = e2;
 	}
 
-	vec3(const vec3<T>& vec)
-	{
-		e[0] = vec.x();
-		e[1] = vec.y();
-		e[2] = vec.z();
-	}
-
 	inline T x() const { return e[0]; }
 	inline T y() const { return e[1]; }
 	inline T z() const { return e[2]; }
@@ -29,30 +22,23 @@ public:
 	inline T g() const { return e[1]; }
 	inline T b() const { return e[2]; }
 
+	inline vec3<T> operator-() const { return vec3<T>(-e[0], -e[1], -e[2]); }
 	inline vec3<T> operator*(const T p) { return vec3<T>(p * e[0], p * e[1], p * e[2]); }
-	inline vec3<T>& operator*=(const T p) 
-	{ 
-		e[0] *= p;
-		e[1] *= p; 
-		e[2] *= p;
-
-		return *this;
-	}
-
 	inline T operator[](int index) { return e[index]; }
 
-	inline vec3<T> operator/(const float val) { return vec3<T>(e[0] / val, e[1] / val, e[2] / val); }
+	inline vec3<T> operator/(T val) { return vec3<T>(e[0] / val, e[1] / val , e[2] / val); }
 
-	inline float magnitude() { return sqrtf(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]); }
+	inline double magnitude() const { return sqrt(magnitude_squared()); }
+	inline double magnitude_squared() const { return (e[0] * e[0] + e[1] * e[1] + e[2] * e[2]); }
 
 	inline vec3<T>& normalize()
 	{
 		// Getting lenght of the vector.
-		float mag = magnitude();
+		T mag = magnitude();
 
 		if (mag > 0)
 		{
-			float invLen = 1 / mag;
+			T invLen = 1 / mag;
 
 			e[0] *= invLen;
 			e[1] *= invLen;
@@ -62,7 +48,7 @@ public:
 		return *this;
 	}
 
-	inline float dot(const vec3<T>& vec) { return (e[0] * vec.r() + e[1] * vec.g() + e[2] * vec.b()); }
+	inline T dot(const vec3<T>& vec) { return (e[0] * vec.r() + e[1] * vec.g() + e[2] * vec.b()); }
 
 	friend std::ostream& operator<<(std::ostream& os, const vec3<T>& vec)
 	{
@@ -73,12 +59,6 @@ public:
 private:
 	T e[3];
 };
-
-template <typename T>
-inline vec3<T> operator*(const T p, const vec3<T>& vec)
-{
-	return vec3<T>(p * vec.x(), p * vec.y(), p * vec.z());
-}
 
 template <typename T>
 inline vec3<T> operator+(const vec3<T>& vec1, const vec3<T>& vec2)
@@ -92,29 +72,30 @@ inline vec3<T> operator-(const vec3<T>& vec1, const vec3<T>& vec2)
 	return vec3<T>(vec1.x() - vec2.x(), vec1.y() - vec2.y(), vec1.z() - vec2.z());
 }
 
+template <typename T>
+inline vec3<T> operator*(const T p, const vec3<T>& vec)
+{
+	return vec3<T>(p * vec.x(), p * vec.y(), p * vec.z());
+}
 
 template <typename T>
-inline float dot(const vec3<T>& vec1, const vec3<T>& vec2)
+inline vec3<T> operator/(const vec3<T>& vec, const T p)
+{
+	return vec3<T>(vec.x() / p, vec.y() / p, vec.z() / p);
+}
+
+template <typename T>
+inline T dot(const vec3<T>& vec1, const vec3<T>& vec2)
 {
 	return (vec1.r() * vec2.r() + vec1.g() * vec2.g() + vec1.b() * vec2.b());
 }
 
 template <typename T>
-inline float magnitude(const vec3<T>& vec) { return sqrtf(vec.r() * vec.r() + vec.g() * vec.g() + vec.b() * vec.b()); }
-
-template <typename T>
-inline vec3<T>& normalize(vec3<T>& vec)
+inline vec3<T> normalize(const vec3<T>& vec)
 {
-	// Getting lenght of the vector.
-	float mag = magnitude(vec);
-
-	if (mag > 0)
-	{
-		float invLen = 1 / mag;
-		vec *= invLen;
-	}
-
-	return vec;
+	auto mag = vec.magnitude();
+	return (vec)/mag;
 }
 
 using vec3f = vec3<float>;
+using vec3d = vec3<double>;
