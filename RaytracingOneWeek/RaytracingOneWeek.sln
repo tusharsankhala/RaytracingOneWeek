@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02.Vec3", "..\02.Vec3\02.Vec3.vcxproj", "{6CDBBCBE-A79F-41AB-B278-0E7672A84561}"
 EndProject
@@ -20,6 +20,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "08.Diffuse", "..\08.Diffuse\08.Diffuse.vcxproj", "{A30B7D75-A9F2-4557-B59F-239FB902519C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "09.Material", "..\09.Material\09.Material.vcxproj", "{DC65D384-D473-4E83-8CAB-1A29C95B3EB7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "10.Dielectrics", "..\10.Dielectrics\10.Dielectrics.vcxproj", "{695A4FCE-F360-403F-885C-123661FCF165}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "11.PositionableCamera", "..\11.PositionableCamera\11.PositionableCamera.vcxproj", "{3ED0CB43-2C36-4930-802B-DBC5B22D50FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,8 +105,27 @@ Global
 		{DC65D384-D473-4E83-8CAB-1A29C95B3EB7}.Release|x64.Build.0 = Release|x64
 		{DC65D384-D473-4E83-8CAB-1A29C95B3EB7}.Release|x86.ActiveCfg = Release|Win32
 		{DC65D384-D473-4E83-8CAB-1A29C95B3EB7}.Release|x86.Build.0 = Release|Win32
+		{695A4FCE-F360-403F-885C-123661FCF165}.Debug|x64.ActiveCfg = Debug|x64
+		{695A4FCE-F360-403F-885C-123661FCF165}.Debug|x64.Build.0 = Debug|x64
+		{695A4FCE-F360-403F-885C-123661FCF165}.Debug|x86.ActiveCfg = Debug|Win32
+		{695A4FCE-F360-403F-885C-123661FCF165}.Debug|x86.Build.0 = Debug|Win32
+		{695A4FCE-F360-403F-885C-123661FCF165}.Release|x64.ActiveCfg = Release|x64
+		{695A4FCE-F360-403F-885C-123661FCF165}.Release|x64.Build.0 = Release|x64
+		{695A4FCE-F360-403F-885C-123661FCF165}.Release|x86.ActiveCfg = Release|Win32
+		{695A4FCE-F360-403F-885C-123661FCF165}.Release|x86.Build.0 = Release|Win32
+		{3ED0CB43-2C36-4930-802B-DBC5B22D50FB}.Debug|x64.ActiveCfg = Debug|x64
+		{3ED0CB43-2C36-4930-802B-DBC5B22D50FB}.Debug|x64.Build.0 = Debug|x64
+		{3ED0CB43-2C36-4930-802B-DBC5B22D50FB}.Debug|x86.ActiveCfg = Debug|Win32
+		{3ED0CB43-2C36-4930-802B-DBC5B22D50FB}.Debug|x86.Build.0 = Debug|Win32
+		{3ED0CB43-2C36-4930-802B-DBC5B22D50FB}.Release|x64.ActiveCfg = Release|x64
+		{3ED0CB43-2C36-4930-802B-DBC5B22D50FB}.Release|x64.Build.0 = Release|x64
+		{3ED0CB43-2C36-4930-802B-DBC5B22D50FB}.Release|x86.ActiveCfg = Release|Win32
+		{3ED0CB43-2C36-4930-802B-DBC5B22D50FB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {21495044-21B7-47E5-A1C6-1AF4EF534A75}
 	EndGlobalSection
 EndGlobal
